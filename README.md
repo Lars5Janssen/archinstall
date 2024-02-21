@@ -136,7 +136,7 @@ mount /dev/nvme1n1p1 /mnt/home
 ```
 ### Pacstrap
 ```bash
-pacstrap -K /mnt base linux linux-headers linux-firmware neovim base-devel bash-completion btrfs-progs dosfstools grub efibootmgr os-prober networkmanager dialog mtools reflector cron ntfs-3g amd-ucode # Use intle-ucode if you have intel dhcpcd
+pacstrap -K /mnt base linux linux-headers linux-firmware neovim base-devel bash-completion btrfs-progs dosfstools grub efibootmgr os-prober networkmanager dialog mtools reflector cron ntfs-3g amd-ucode nvidia git# Use intle-ucode if you have intel dhcpcd
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
@@ -185,7 +185,6 @@ shutdown
 ```
 ## Post Installation
 ### Supress Journald Error during shutdown
-I dont need it. Solution:
 edit /etc/systemd/journald.conf
 Under [Journal] add "Storage=volatile" like this
 ```toml
@@ -194,7 +193,59 @@ Under [Journal] add "Storage=volatile" like this
 Storage=volatile
 /.../
 ```
-
 ### Create User
 ```bash
+useradd -m -G wheel username
+passwd username
+EDITOR=nvim visudo # uncomment wheel
+```
+exit and login as new user. Test ```sudo```
 
+### AUR
+```bash
+git clone https://aur.archlinux.org/paru.git
+cd paru
+makepkg -si
+```
+
+### Snapper
+```bash
+pacman -S snapper
+snapper -c root create-config /
+btrfs sub del /.snapshots/
+mkdir /.snapshots
+nvim /etc/fstab
+mount /.snapshots/
+paru -S grub-btrfs
+nvim /etc/default/grub # Add:
+                       # GRUB_BTRFS_CREATE_ONLY_HARMONIZED_ENTRIES="true"
+                       # GRUB_BTRFS_LIMIT="10"
+
+nvim /etc/snapper/configs/root  # Set
+                                # NUMBER_CLEANUP="yes"
+                                # NUMBER_MIN_AGE="0"
+                                # NUMBER_LIMIT="12"
+                                # NUMBER_LIMIT="10"
+                                # TIMELINE_CREAT="no"
+
+systemctl enable cronie.service
+systemctl start cronie.servicee
+
+sudo pacman -S snap-pac
+paru -S snap-pac-grub
+```
+
+#### How to Rollback with GRUB
+- Use GRUB to boot into snapshot
+- ```sudo snapper rollback```
+- ```sudo reboot```
+- select previous snapshot
+  - input number you got from rollback at 3 places:
+  - 1: at the kernel
+  - 2: at the root fs/volume
+  - 3: at the initramfs
+- press F10
+- Boot into corrosponding snapshot number from rollback. This should be writable
+- ```sudo grub-mkconfig -o /boot/grub/grub.cfg```
+- ```sudo grub-install -target=x84_64-efi --efi-directory=/boot/efi/ --bootloader-id=GRUB```
+- Reboot into GRUB, confirm that default snapshot is Number from rollback
