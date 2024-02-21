@@ -124,7 +124,7 @@ mount -o relatime,space_cache=v2,ssd,compress=lzo,subvolid=5 /dev/nvme0n1p6 /mnt
 mount /dev/nvme0n1p1 /mnt/boot/efi
 mount /dev/nvme1n1p1 /mnt/home 
 
-pacstrap -K /mnt base linux linux-headers linux-firmware nvim base-devel bash-completion btrfs-progs dosfstools grub efibootmgr os-prober networkmanager network-manager-applet dialog mtools reflector cron
+pacstrap -K /mnt base linux linux-headers linux-firmware nvim base-devel bash-completion btrfs-progs dosfstools grub efibootmgr os-prober networkmanager network-manager-applet dialog mtools reflector cron ntfs-3g
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
