@@ -159,6 +159,7 @@ echo "YOURHOSTNAME" >> /etc/hostname
 nvim /etc/hosts         # 127.0.0.1{tab}localhost
                         # ::1{tab}localhost
                         # 127.0.1.1{tab}hostname.localdomain{tab}hostname
+mkinitcpio -P
 
 passwd         # Set Root Password
 ```
