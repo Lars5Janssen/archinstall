@@ -100,7 +100,7 @@ w ENTER
 ```bash
 lsblk
 
-mkswap -L SWAP/dev/nvme0n1p5
+mkswap -L SWAP /dev/nvme0n1p5
 swapon /dev/nvme0n1p5
 mkfs.btrfs -L ROOT /dev/nvme0n1p6
 mkfs.ext4 -L HOME /dev/nvme1n1p1
@@ -117,12 +117,12 @@ umount /mnt
 
 mount -o relatime,space_cache=v2,ssd,compress=lzo,subvol=@ /dev/nvme0n1p6 /mnt
 mkdir -p /mnt/{boot/efi,home,var/log,var/cache/pacman/pkg,btrfs,tmp}
+mount -o relatime,space_cache=v2,ssd,compress=lzo,subvol=@tmp /dev/nvme0n1p6 /mnt/tmp
 mount -o relatime,space_cache=v2,ssd,compress=lzo,subvol=@log /dev/nvme0n1p6 /mnt/var/log
 mount -o relatime,space_cache=v2,ssd,compress=lzo,subvol=@pkg /dev/nvme0n1p6 /mnt/var/cache/pacman/pkg
-mount -o relatime,space_cache=v2,ssd,compress=lzo,subvol=@tmp /dev/nvme0n1p6 /mnt/tmp
 mount -o relatime,space_cache=v2,ssd,compress=lzo,subvolid=5 /dev/nvme0n1p6 /mnt/btrfs
-mount /dev/nvme1n1p1 /mnt/home 
 mount /dev/nvme0n1p1 /mnt/boot/efi
+mount /dev/nvme1n1p1 /mnt/home 
 
 pacstrap -K /mnt base linux linux-headers inux-firmware nvim base-devel bash-completion btrfs-progs dosfstools grub efibootmgr os-prober networkmanager network-manager-applet dialog mtools reflector cron
 
