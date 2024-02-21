@@ -55,7 +55,17 @@ nvim /etc/default/grub # GRUB_DISABLE_OS_PROBER=false
 os-prober
 grub-mkconfig -o /boot/grub/grub.cfg
 
+umount -a 
+# OR
+umount -R /mnt # Try this first | Reference Archwiki install 4 Reboot if a partition is busy
+
+shutdown
+
+# REMOVE USB STICK
+
+# TURN PC BACK ON
 
 # Post-Install
 pacman -S list.txt # VIP
+
 ```
