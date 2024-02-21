@@ -6,22 +6,51 @@ These are the steps i do, to install arch.
 - Windows Dual Boot
 - GRUB
 - Application list for Pacman
-# Commands of install
+# Installprocess
+
+## MAKE SHURE WINDOWS IS ON A GPT LABLE
+try this from [here](https://learn.microsoft.com/en-us/windows/deployment/mbr-to-gpt) if it is mbr.
+```cmd
+MBR2GPT.EXE /validate /disk:0 /allowFullOS
+# If no errors
+MBR2GPT.EXE /convert /disk:0 /allowFullOS
+```
+then reboot and enter BIOS Menu and disable BIOS
+for me this is disableing CSM
+
+then check results with:
+```cmd
+diskpart
+list disk
+```
+list disk should return a "*" under the disk you tried to convert.
+
+## If windows is on GPT, procede with archiso
 
 ```bash
 loadkeys en
 
-setfont ter-132b
+setfont ter-120b
 
-cat /sys/firmware/efi/fw_platform_size
+# Check for TODO
+cat /sys/firmware/efi/fw_platform_size # Should echo "64"
 
+# Are you connected to the Internet
 ip link
 ping archlinux.org
 
-timedatectl
-# set correct timezone may be not neccecary
+# Update Mirrorlist for better install
+# TODO Post Install?
+pacamn -Sy reflector
+reflector -c Germany --sort rate --save /etc/pacman.d/mirrorlist
+pacman -Syyy
+
+# Set NTP to true
+
+timedatectl set-ntp true
 
 # make fs partitions
+fdisk /dev/nvme0n1
 # swap (8g), root(btrfs), Windows Partitions...
 # How to formate BTRFS?
 # Home
