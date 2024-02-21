@@ -63,7 +63,7 @@ ping archlinux.org
 # Update Mirrorlist for better install
 # TODO Post Install?
 pacman -Sy reflector
-reflector -c Germany --threads 5 --verbose --sort rate --save /etc/pacman.d/mirrorlist
+reflector -c Germany --threads 16 --verbose --sort rate --save /etc/pacman.d/mirrorlist
 pacman -Syyy
 
 # Set NTP to true
