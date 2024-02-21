@@ -80,8 +80,10 @@ now in fdisk for /dev/nvme0n1:
 ```fdisk
 n ENTER
 ENTER # Default 5
+ENTER # Default bla bla bla
 +38G ENTER
 t ENTER
+ENTER # Default 5
 19 ENTER
 n ENTER
 ENTER # Default 6
@@ -123,24 +125,22 @@ btrfs su cr /mnt/@snapshots
 
 umount /mnt
 
-mount -o relatime,compress=lzo,subvol=@ /dev/nvme0n1p6 /mnt
+mount -o relatime,compress=zstd,subvol=@ /dev/nvme0n1p6 /mnt
 mkdir -p /mnt/{boot/efi,home,var/log,var/cache/pacman/pkg,btrfs,tmp}
-mount -o relatime,compress=lzo,subvol=@tmp /dev/nvme0n1p6 /mnt/tmp
-mount -o relatime,compress=lzo,subvol=@log /dev/nvme0n1p6 /mnt/var/log
-mount -o relatime,compress=lzo,subvol=@pkg /dev/nvme0n1p6 /mnt/var/cache/pacman/pkg
-mount -o relatime,compress=lzo,subvolid=5 /dev/nvme0n1p6 /mnt/btrfs
+mount -o relatime,compress=zstd,subvol=@tmp /dev/nvme0n1p6 /mnt/tmp
+mount -o relatime,compress=zstd,subvol=@log /dev/nvme0n1p6 /mnt/var/log
+mount -o relatime,compress=zstd,subvol=@pkg /dev/nvme0n1p6 /mnt/var/cache/pacman/pkg
+mount -o relatime,compress=zstd,subvolid=5 /dev/nvme0n1p6 /mnt/btrfs
 mount /dev/nvme0n1p1 /mnt/boot/efi
 mount /dev/nvme1n1p1 /mnt/home 
 ```
 ### Pacstrap
 ```bash
-pacstrap -K /mnt base linux linux-headers linux-firmware neovim base-devel bash-completion btrfs-progs dosfstools grub efibootmgr os-prober networkmanager network-manager-applet dialog mtools reflector cron ntfs-3g
+pacstrap -K /mnt base linux linux-headers linux-firmware neovim base-devel bash-completion btrfs-progs dosfstools grub efibootmgr os-prober networkmanager dialog mtools reflector cron ntfs-3g amd-ucode # Use intle-ucode if you have intel
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
-arch-chroot /mnt
-
-pacman -S --needed 
+arch-chroot /mnt 
 
 nvim /etc/fstab # Remove shit according to [this video](https://www.youtube.com/watch?v=TKdZiCTh3EM)
 
@@ -149,9 +149,11 @@ hwclock --systohc
 
 nvim /etc/locale.gen    # Uncomment en_US.UTF-8 UTF-8
 locale-gen
-nvim /etc/locale.conf   # LANG=en_US.UTF-8
-nvim /etc/vconsole.conf # KEYMAP=en_US.UTF-8
-nvim /etc/hostname      # Set Hostname (funny)
+
+echo "LANG=en_US.UTF-8" >> /etc/locale.conf 
+echo "KEYMAP=en_US.UTF-8" >> /etc/vconsole.conf 
+echo "YOURHOSTNAME" >> /etc/hostname 
+
 nvim /etc/hosts         # 127.0.0.1{tab}localhost
                         # ::1{tab}localhost
                         # 127.0.1.1{tab}hostname.localdomain{tab}hostname
@@ -167,9 +169,10 @@ grub-install --target=x84_64-efi --efi-directory=/boot/efi/ --bootloader-id=GRUB
 # does /etc/default/grub exist
 os-prober
 
-umount -a 
-# OR
+exit
+
 umount -R /mnt # Try this first | Reference Archwiki install 4 Reboot if a partition is busy
+umount -a
 
 shutdown
 
