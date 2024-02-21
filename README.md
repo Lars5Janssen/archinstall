@@ -24,9 +24,9 @@ list disk
 if the boot drive does not have a "*" under the gpt colum, it is mbr.
 Try this from [here](https://learn.microsoft.com/en-us/windows/deployment/mbr-to-gpt) if it is mbr.
 ```cmd
-# Check if disk 0 is the right disk with previous command
+:: Check if disk 0 is the right disk with previous command
 MBR2GPT.EXE /validate /disk:0 /allowFullOS
-# If no errors
+:: If no errors
 MBR2GPT.EXE /convert /disk:0 /allowFullOS
 ```
 then reboot and enter BIOS Menu and disable BIOS
