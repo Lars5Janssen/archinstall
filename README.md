@@ -44,7 +44,9 @@ list disk
 ```
 list disk should return a "*" under the disk you tried to convert.
 
-## Archiso
+## ArchISO
+
+### Basic Config of ArchISO
 
 ```bash
 loadkeys en
@@ -67,8 +69,9 @@ pacman -Syyy
 # Set NTP to true
 
 timedatectl set-ntp true
-
-# make fs partitions
+```
+### FS Partitioning
+```bash
 lsblk
 fdisk /dev/nvme0n1
 ```
@@ -101,7 +104,7 @@ ENTER # Default MAX
 Y ENTER # If you see a NTFS Signature, remove it
 w ENTER
 ```
-
+### Filesystem creation and mount (BTRFS Stuff)
 ```bash
 lsblk
 
@@ -128,7 +131,9 @@ mount -o relatime,compress=lzo,subvol=@pkg /dev/nvme0n1p6 /mnt/var/cache/pacman/
 mount -o relatime,compress=lzo,subvolid=5 /dev/nvme0n1p6 /mnt/btrfs
 mount /dev/nvme0n1p1 /mnt/boot/efi
 mount /dev/nvme1n1p1 /mnt/home 
-
+```
+### Pacstrap
+```bash
 pacstrap -K /mnt base linux linux-headers linux-firmware neovim base-devel bash-completion btrfs-progs dosfstools grub efibootmgr os-prober networkmanager network-manager-applet dialog mtools reflector cron ntfs-3g
 
 genfstab -U /mnt >> /mnt/etc/fstab
@@ -152,11 +157,9 @@ nvim /etc/hosts         # 127.0.0.1{tab}localhost
                         # 127.0.1.1{tab}hostname.localdomain{tab}hostname
 
 passwd         # Set Root Password
-
-mkinitcpio -P  # Might not be needed
-
-
-# GRUB Installation
+```
+### GRUB
+```bash
 grub-mkconfig -o /boot/grub/grub.cfg
 nvim /etc/default/grub # GRUB_DISABLE_OS_PROBER=false
 grub-mkconfig -o /boot/grub/grub.cfg
@@ -178,3 +181,4 @@ shutdown
 pacman -S list.txt # VIP
 
 ```
+## Post Installation
