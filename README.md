@@ -13,9 +13,14 @@ TODO
 TODO
 
 ## Install Windows
-TODO
+### Disable Fast Reboot
+After windows install, go to
+Control Panel -> Hardware and Sound -> Change what the power buttons do -> Change settings that are currently unacailable -> Uncheck "Turn on fast startup (recommended)"
 
-## MAKE SHURE WINDOWS IS ON A GPT LABLE
+then reboot into windows and procede
+
+### Format C: with gpt label
+
 check if disk is mbr:
 ```cmd
 diskpart
@@ -39,7 +44,7 @@ list disk
 ```
 list disk should return a "*" under the disk you tried to convert.
 
-## If windows is on GPT, procede with archiso
+## Archiso
 
 ```bash
 loadkeys en
