@@ -115,12 +115,12 @@ btrfs su cr /mnt/@snapshots
 
 umount /mnt
 
-mount -o relatime,space_cache=v2,ssd,compress=lzo,subvol=@ /dev/nvme0n1p6 /mnt
+mount -o relatime,compress=lzo,subvol=@ /dev/nvme0n1p6 /mnt
 mkdir -p /mnt/{boot/efi,home,var/log,var/cache/pacman/pkg,btrfs,tmp}
-mount -o relatime,space_cache=v2,ssd,compress=lzo,subvol=@tmp /dev/nvme0n1p6 /mnt/tmp
-mount -o relatime,space_cache=v2,ssd,compress=lzo,subvol=@log /dev/nvme0n1p6 /mnt/var/log
-mount -o relatime,space_cache=v2,ssd,compress=lzo,subvol=@pkg /dev/nvme0n1p6 /mnt/var/cache/pacman/pkg
-mount -o relatime,space_cache=v2,ssd,compress=lzo,subvolid=5 /dev/nvme0n1p6 /mnt/btrfs
+mount -o relatime,compress=lzo,subvol=@tmp /dev/nvme0n1p6 /mnt/tmp
+mount -o relatime,compress=lzo,subvol=@log /dev/nvme0n1p6 /mnt/var/log
+mount -o relatime,compress=lzo,subvol=@pkg /dev/nvme0n1p6 /mnt/var/cache/pacman/pkg
+mount -o relatime,compress=lzo,subvolid=5 /dev/nvme0n1p6 /mnt/btrfs
 mount /dev/nvme0n1p1 /mnt/boot/efi
 mount /dev/nvme1n1p1 /mnt/home 
 
@@ -154,7 +154,8 @@ mkinitcpio -P  # Might not be needed
 # GRUB Installation
 grub-mkconfig -o /boot/grub/grub.cfg
 nvim /etc/default/grub # GRUB_DISABLE_OS_PROBER=false
-grub-install --target=x84_64-efi --efi-directory=??? --bootloader-id=GRUB
+grub-mkconfig -o /boot/grub/grub.cfg
+grub-install --target=x84_64-efi --efi-directory=/boot/efi/ --bootloader-id=GRUB
 # does /etc/default/grub exist
 os-prober
 
