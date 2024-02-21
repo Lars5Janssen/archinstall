@@ -63,7 +63,7 @@ ping archlinux.org
 # Update Mirrorlist for better install
 # TODO Post Install?
 pacman -Sy reflector
-reflector -c Germany --threads 16 --verbose --sort rate --save /etc/pacman.d/mirrorlist
+reflector -c Germany --threads 16 --verbose --sort rate --score 15 --save /etc/pacman.d/mirrorlist
 pacman -Syyy
 
 # Set NTP to true
@@ -136,11 +136,13 @@ mount /dev/nvme1n1p1 /mnt/home
 ```
 ### Pacstrap
 ```bash
-pacstrap -K /mnt base linux linux-headers linux-firmware neovim base-devel bash-completion btrfs-progs dosfstools grub efibootmgr os-prober networkmanager dialog mtools reflector cron ntfs-3g amd-ucode # Use intle-ucode if you have intel
+pacstrap -K /mnt base linux linux-headers linux-firmware neovim base-devel bash-completion btrfs-progs dosfstools grub efibootmgr os-prober networkmanager dialog mtools reflector cron ntfs-3g amd-ucode # Use intle-ucode if you have intel dhcpcd
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
 arch-chroot /mnt 
+
+systemctl enable dhcpcd.service
 
 nvim /etc/fstab # Remove shit according to [this video](https://www.youtube.com/watch?v=TKdZiCTh3EM)
 
@@ -179,9 +181,19 @@ shutdown
 # REMOVE USB STICK
 
 # TURN PC BACK ON
-
-# Post-Install
-pacman -S list.txt # VIP
-
 ```
 ## Post Installation
+### Supress Journald Error during shutdown
+I dont need it. Solution:
+edit /etc/systemd/journald.conf
+Under [Journal] add "Storage=volatile" like this
+```toml
+/.../
+[Journal]
+Storage=volatile
+/.../
+```
+
+### Create User
+```bash
+
