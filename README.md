@@ -136,7 +136,7 @@ mount /dev/nvme1n1p1 /mnt/home
 ```
 ### Pacstrap
 ```bash
-pacstrap -K /mnt base linux linux-headers linux-firmware neovim base-devel bash-completion btrfs-progs dosfstools grub efibootmgr os-prober networkmanager dialog mtools reflector cron ntfs-3g amd-ucode nvidia git# Use intle-ucode if you have intel dhcpcd
+pacstrap -K /mnt base linux linux-headers linux-firmware neovim base-devel bash-completion btrfs-progs dosfstools grub efibootmgr os-prober networkmanager dialog mtools reflector cron ntfs-3g amd-ucode nvidia-dkms git# Use intle-ucode if you have intel dhcpcd
 
 genfstab -U /mnt >> /mnt/etc/fstab
 
@@ -249,3 +249,27 @@ paru -S snap-pac-grub
 - ```sudo grub-mkconfig -o /boot/grub/grub.cfg```
 - ```sudo grub-install -target=x84_64-efi --efi-directory=/boot/efi/ --bootloader-id=GRUB```
 - Reboot into GRUB, confirm that default snapshot is Number from rollback
+
+### Dotfiles Repo
+```bash
+sudo pacman -S openssh
+ssh-keygen -t ed25519 -C "arch"
+eval "$(ssh-agent)"
+shh-add ~/.ssh/*
+cat ~/.ssh/id_ed25519.pub # past to Github (Or something else fuck github)
+git clone git@github.com:Lars5Janssen/dotfiles.git
+sudo pacman -S stow starship alacritty zoxide ranger
+```
+
+### Hpyrland
+```bash
+sudo echo "options nvidia_drm modeset=1" >> /etc/modprobe.d/nvidia_drm.conf
+sudo nvim /etc/mkinitcpio.conf  # Add "/etc/modprobe.d/nividia_drm.conf" to FILES=() like this:
+                                # FILES=(/etc/modprobe.d/nvidia_drm.conf)
+
+reboot
+
+cat /sys/module/nvidia_drm/parameters/modeset # Should return Y
+
+sudo pacman -S sddm
+```
