@@ -201,6 +201,13 @@ EDITOR=nvim visudo # uncomment wheel
 ```
 exit and login as new user. Test ```sudo```
 
+### Pacman.conf
+```bash
+sudoedit /etc/pacman.conf # Enable Paralell Downloads
+                          # Enable Color
+                          # Add 'ILoveCandy'
+```
+
 ### AUR
 ```bash
 git clone https://aur.archlinux.org/paru.git
@@ -263,6 +270,7 @@ sudo pacman -S stow starship alacritty zoxide ranger
 
 ### Hpyrland
 ```bash
+sudo pacman -S hyprland pipewire wireplumber mako polkit nextcloud-client kdeconnect-app keepassxc waybar
 sudo echo "options nvidia_drm modeset=1" >> /etc/modprobe.d/nvidia_drm.conf
 sudo nvim /etc/mkinitcpio.conf  # Add "/etc/modprobe.d/nividia_drm.conf" to FILES=() like this:
                                 # FILES=(/etc/modprobe.d/nvidia_drm.conf)
@@ -270,6 +278,4 @@ sudo nvim /etc/mkinitcpio.conf  # Add "/etc/modprobe.d/nividia_drm.conf" to FILE
 reboot
 
 cat /sys/module/nvidia_drm/parameters/modeset # Should return Y
-
-sudo pacman -S sddm
 ```
