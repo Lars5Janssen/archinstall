@@ -9,6 +9,7 @@ These are the steps i do, to install arch.
 # Installprocess
 ## Windows boot usb
 TODO
+WoeUSB (under fedora 38)
 ## Archiso
 TODO
 
