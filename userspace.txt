@@ -1,0 +1,17 @@
+snapper
+snap-pac
+stow
+starship
+alacritty
+zoxide
+firefox
+hyprland
+pipewire
+wireplumber
+mako
+polkit
+nextcloud-client
+kdeconnect-app
+keepassxc
+waybar
+flatpak
